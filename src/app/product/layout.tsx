@@ -14,7 +14,9 @@ import ListItemIcon from "@mui/material/ListItemIcon";
 import ListItemText from "@mui/material/ListItemText";
 import { sideBarRoutes } from "../utils/sideBarRoutes";
 import { usePathname, useRouter } from "next/navigation";
-import { Button, useTheme } from "@mui/material";
+import { Button, Collapse, useTheme } from "@mui/material";
+import ExpandLess from "@mui/icons-material/ExpandLess";
+import ExpandMore from "@mui/icons-material/ExpandMore";
 
 const drawerWidth = 240;
 
@@ -26,6 +28,7 @@ export default function PermanentDrawerLeft({
     const router = useRouter();
     const pathname = usePathname();
     const theme = useTheme();
+    const [open, setOpen] = React.useState<boolean>(false);
 
     // check if given route is active route
     function isActiveRoute(route: string) {
@@ -43,6 +46,10 @@ export default function PermanentDrawerLeft({
     // function for handling navigation on sidebar
     const handleNavigation = (route: string) => {
         router.push(`/product/${route}`);
+    };
+
+    const handleSubRouteNavigation = (route: string, subRoute: string) => {
+        router.push(`/product/${route}/${subRoute}`);
     };
 
     const handleLogout = () => {
@@ -65,17 +72,14 @@ export default function PermanentDrawerLeft({
                 position="fixed"
                 sx={{
                     width: `calc(100% - ${drawerWidth}px)`,
-                    ml: `${drawerWidth}px`
+                    ml: `${drawerWidth}px`,
                 }}
             >
                 <Toolbar sx={{ display: "flex", justifyContent: "space-between" }}>
                     <Typography variant="h6" noWrap component="div">
                         E-Commerce
                     </Typography>
-                    <Button
-                        variant="contained"
-                        onClick={handleLogout}
-                    >
+                    <Button variant="contained" onClick={handleLogout}>
                         Logout
                     </Button>
                 </Toolbar>
@@ -98,21 +102,56 @@ export default function PermanentDrawerLeft({
                 <Divider />
                 {/* Side Bar Routes */}
                 <List>
-                    {sideBarRoutes.map((item) => (
-                        <ListItem key={item.name} disablePadding>
-                            <ListItemButton
-                                sx={
-                                    isActiveRoute(item.route)
-                                        ? { background: theme.palette.primary.main }
-                                        : {}
-                                }
-                                onClick={() => handleNavigation(item.route)}
-                            >
-                                <ListItemIcon>{item.icon}</ListItemIcon>
-                                <ListItemText primary={item.name} />
-                            </ListItemButton>
-                        </ListItem>
-                    ))}
+                    {sideBarRoutes.map((item, index) => {
+                        return !item.collapsible ? (
+                            <ListItem disablePadding key={item.name}>
+                                <ListItemButton
+                                    sx={{
+                                        background: isActiveRoute(item.route)
+                                            ? theme.palette.primary.main
+                                            : {},
+                                    }}
+                                    onClick={() => handleNavigation(item.route)}
+                                >
+                                    <ListItemIcon>{item.icon}</ListItemIcon>
+                                    <ListItemText primary={item.name} />
+                                </ListItemButton>
+                            </ListItem>
+                        ) : (
+                            <List key={item.name}>
+                                <ListItem disablePadding >
+                                    <ListItemButton
+                                        onClick={() => {
+                                            setOpen(!open);
+                                        }}
+                                    >
+                                        <ListItemIcon>{item.icon}</ListItemIcon>
+                                        <ListItemText primary={item.name} />
+                                        {open ? <ExpandLess /> : <ExpandMore />}
+                                    </ListItemButton>
+                                </ListItem>
+                                <Collapse in={open} timeout="auto" unmountOnExit>
+                                    {item.subRoutes?.map((subRoute) => (
+                                        <ListItem component="div" disablePadding key={subRoute.route}>
+                                            <ListItemButton
+                                                sx={{
+                                                    background: isActiveRoute(subRoute.route)
+                                                        ? theme.palette.primary.main
+                                                        : "transparent",
+                                                    pl: 4,
+                                                }}
+                                                onClick={() =>
+                                                    handleSubRouteNavigation(item.route, subRoute.route)
+                                                }
+                                            >
+                                                <ListItemText primary={subRoute.name} />
+                                            </ListItemButton>
+                                        </ListItem>
+                                    ))}
+                                </Collapse>
+                            </List>
+                        );
+                    })}
                 </List>
             </Drawer>
             {/* Main Section */}
