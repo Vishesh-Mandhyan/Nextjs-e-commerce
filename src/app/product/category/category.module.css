@@ -1,0 +1,68 @@
+.categoriesContainer {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+}
+
+.categoryForm {
+    display: flex;
+    gap: 10px;
+}
+
+.categoryList {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+
+.category {
+    display: flex;
+    align-items: center;
+    padding: 10px 20px;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    cursor: pointer;
+}
+
+.category:hover {
+    background-color: #f5f5f5;
+}
+
+.deleteButton {
+    margin-left: 10px;
+    padding: 5px 10px;
+    border: none;
+    border-radius: 5px;
+    background-color: #f00;
+    color: #fff;
+    cursor: pointer;
+}
+
+.deleteButton:hover {
+    /* Darker red on hover */
+    background-color: #c00;
+}
+
+.categoryInput {
+    padding: 10px;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    margin-bottom: 10px;
+    width: 100%;
+}
+
+.addButton {
+    padding: 10px 20px;
+    border: none;
+    border-radius: 5px;
+    /* Green background color for add button */
+    background-color: #4CAF50;
+    color: white;
+    cursor: pointer;
+    transition: all 0.2s ease-in-out;
+}
+
+.addButton:hover {
+    background-color: #3e8e41;
+    /* Darker green on hover */
+}
