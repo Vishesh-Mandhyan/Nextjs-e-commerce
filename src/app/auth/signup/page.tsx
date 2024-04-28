@@ -6,6 +6,7 @@ import styles from "../auth.module.css"; // Import the CSS module
 import bcrypt from "bcryptjs";
 import { handleSignUp } from "../apiUtils";
 import { useRouter } from "next/navigation";
+import { Typography } from "@mui/material";
 
 const SignUpForm: React.FC = () => {
     const router = useRouter();
@@ -56,6 +57,10 @@ const SignUpForm: React.FC = () => {
         }
     };
 
+    const navigateToLogin = () => {
+        router.push("/auth/login");
+    }
+
     return (
         <form onSubmit={handleSubmit} className={styles.auth_form}>
             <h2 className={styles.auth_form_h2}>Sign Up</h2>
@@ -96,6 +101,10 @@ const SignUpForm: React.FC = () => {
             <Button type="submit" variant="contained" color="primary" fullWidth>
                 Sign Up
             </Button>
+            <Typography>
+                Already have an account?
+                <Button onClick={navigateToLogin}>Login</Button>
+            </Typography>
         </form>
     );
 };

@@ -1,14 +1,15 @@
-"use client"
-import React, { useState } from 'react';
-import TextField from '@mui/material/TextField';
-import Button from '@mui/material/Button';
-import styles from "../auth.module.css"
-import { handleLogin } from '../apiUtils';
-import { useRouter } from 'next/navigation';
+"use client";
+import React, { useState } from "react";
+import TextField from "@mui/material/TextField";
+import Button from "@mui/material/Button";
+import styles from "../auth.module.css";
+import { handleLogin } from "../apiUtils";
+import { useRouter } from "next/navigation";
+import { Typography } from "@mui/material";
 
 const LoginPage: React.FC = () => {
-    const [email, setEmail] = useState('');
-    const [password, setPassword] = useState('');
+    const [email, setEmail] = useState("");
+    const [password, setPassword] = useState("");
     const router = useRouter();
     const [error, setError] = useState<string | null>(null);
 
@@ -19,10 +20,14 @@ const LoginPage: React.FC = () => {
         try {
             await handleLogin(email, password);
             router.push("/product/category");
-            console.log('Login successful!');
+            console.log("Login successful!");
         } catch (error) {
             setError((error as Error).message); // Set error message
         }
+    };
+
+    const navigateToSignUp = () => {
+        router.push("/auth/signup");
     };
 
     return (
@@ -52,6 +57,10 @@ const LoginPage: React.FC = () => {
             <Button type="submit" variant="contained" color="primary" fullWidth>
                 Login
             </Button>
+            <Typography>
+                Don&apos;t have an account?
+                <Button onClick={navigateToSignUp}>SignUp</Button>
+            </Typography>
         </form>
     );
 };
