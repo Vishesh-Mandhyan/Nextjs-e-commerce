@@ -1,19 +1,18 @@
 "use client";
-import React, { useState, useEffect } from "react";
-// import { Product } from './ProductService'; // Import the Product interface
-// import { getProducts } from './ProductService'; // Import the get products function
+import React from "react";
 import {
   Grid,
   Card,
   CardContent,
   Typography,
-  CardActionArea,
   Switch,
+  IconButton,
 } from "@mui/material";
 import styles from "../listing.module.css"; // Import the CSS module (optional)
 import useSWR from "swr";
-import { enableDisableProduct, getProducts } from "../apiUtils";
+import { deleteProduct, enableDisableProduct, getProducts } from "../apiUtils";
 import Image from "next/image";
+import DeleteOutlineOutlinedIcon from "@mui/icons-material/DeleteOutlineOutlined";
 
 const ProductsList: React.FC = () => {
   //  Get all products
@@ -40,33 +39,38 @@ const ProductsList: React.FC = () => {
         {products && products.length > 0 ? (
           products.map((product: Product) => (
             <Grid item key={product.name} xs={12} sm={6} md={4}>
-              <Card>
-                <CardActionArea>
-                  <CardContent>
-                    <Image
-                      src={product.imageUrl}
-                      alt="Product Image"
-                      width={200}
-                      height={150}
-                    />
-                    <Typography variant="h5" component="div">
-                      {product.name}
-                    </Typography>
-                    <Typography variant="body2" color="text.secondary">
-                      {product.description}
-                    </Typography>
-                    <Typography variant="body2">
-                      Price: ${product.price}
-                    </Typography>
-                    <Switch
-                      {...label}
-                      checked={product.active}
-                      onChange={(e, checked) =>
-                        enableDisableProduct(product.name, checked)
-                      }
-                    />
-                  </CardContent>
-                </CardActionArea>
+              <Card className={styles.productCard}>
+                <CardContent>
+                  <Image
+                    src={product.imageUrl}
+                    alt="Product Image"
+                    width={200}
+                    height={150}
+                  />
+                  <Typography variant="h5" component="div">
+                    {product.name}
+                  </Typography>
+                  <Typography variant="body2" color="text.secondary">
+                    {product.description}
+                  </Typography>
+                  <Typography variant="body2">
+                    Price: ${product.price}
+                  </Typography>
+                  <Switch
+                    {...label}
+                    checked={product.active}
+                    onChange={(e, checked) =>
+                      enableDisableProduct(product.name, checked)
+                    }
+                  />
+                </CardContent>
+                <IconButton
+                  aria-label="delete"
+                  onClick={async () => await deleteProduct(product.name)}
+                  className={styles.productDeleteBtn}
+                >
+                  <DeleteOutlineOutlinedIcon />
+                </IconButton>
               </Card>
             </Grid>
           ))

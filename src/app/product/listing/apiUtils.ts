@@ -50,3 +50,24 @@ export const enableDisableProduct = async (
         }, 100);
     });
 };
+
+export const deleteProduct = async (productName: string) => {
+    const allProducts = await getProducts();
+
+    // simulating api response with promise
+    return new Promise((resolve, reject) => {
+        setTimeout(() => {
+            const productExists = allProducts.some((element) => element.name === productName);
+
+            // If Product doesn't exist throw an error
+            if (!productExists) {
+                reject(new Error('Category does not exist'));
+            }
+
+            const remainingProducts = allProducts.filter((element) => element.name !== productName);
+            localStorage.setItem("products", JSON.stringify(remainingProducts));
+            mutate("/products");
+            resolve(true);
+        }, 500);
+    });
+};
