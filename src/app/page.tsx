@@ -1,10 +1,10 @@
-import React from 'react'
-import styles from "./page.module.css"
+import React from "react";
+import styles from "./page.module.css";
+import { redirect } from "next/navigation";
 
 const page = () => {
-  return (
-    <div className={styles.main}>page</div>
-  )
-}
+  redirect("/auth/login");
+  return <div>page</div>;
+};
 
-export default page
+export default page;
